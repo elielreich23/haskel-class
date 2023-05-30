@@ -1,3 +1,5 @@
+import Data.Char
+
 --Aula 3: Recursão
 fat 0 = 1
 fat n = n * fat(n-1)
@@ -106,133 +108,80 @@ tab' (x:xs) (y:ys) = (x, y, x*y): tab' (x:xs) ys
 tab [] _ = []
 tab (x:xs) (y:ys) = tab' (x:xs) (y:ys): tab xs (y:ys)
 
-tab'' xs ys = [(x,y,x*y)|x<-xs, y<-ys]
+tab'' xs ys = [(x,y,x*y)|x<-xs, y<-ys]               
 
 --Aula 10:
+divide [] = ([],[])
+divide ((x,y):xys) =(x:xs, y:ys) 
+    where (xs,ys) = divide xys
+
+--Aula 12:
+aux (x:xs) = if x /= '\n' then [] else x:aux xs
+aux' (x:xs) = if x == '\n' then xs else aux' xs
+
+separar' xs = (aux xs, aux' xs)
+
+remover e [] = []
+remover e (x:xs) = if x == e then remover e xs else x:remover e xs
+
+removaDup [] = []
+removaDup (x:xs) = x:removaDup (remover x xs)
+
+removaDup' [] = []
+removaDup' (x:xs) = if pertence x xs then removaDup' xs else x:removaDup' xs --ordem errada
+
+add' (a,b) (c,d) = (a+c, b+d)
+
 separar [] = ([],[])
-separar ((x,y):xys) =(x:xs, y:ys) 
-    where (xs,ys) = separar xys
+separar (x:xs) = if x /= '\n' then (x:ys, zs) else ([],xs)
+    where (ys,zs) = separar xs
+
+--Aula 13: Funções de primeira ordem
+teste1 = (\x y -> x + y) 10
+
+aplica2 f x = f(f x)
+
+flipnoflop f x y = f y x
+
+zero = \s z -> z
+um = \s z -> s z
+dois = \s z -> s (s z)
+tres = \s z -> s (s (s z))
+quatro = \s z -> s (s (s (s z)))
 
 
-/***/
+suc = \w y x -> y (w y x)
+prede = \n f x -> n (\g h -> h (g f)) (\u -> x) (\u -> u)
+add = \x y w u -> x w (y w u)
+mul = \x y w u -> x (y w) u
 
-lista 2
---Exercício 1
-pertence n [] = False
-pertence n (x:xs) = if n == x then True
-                    else pertence n xs 
+v = \v f -> v
+f = \v f -> f
 
---Exercício 2
-intercessao [] ys = []
-intercessao (x:xs) ys = if pertence x ys then x:intercessao xs ys else intercessao xs ys
+e = \x y -> x y (\u v -> v)
+ou = \x y -> x (\u v -> u) y
+nao = \x -> x (\ u v -> v) (\a b -> a)
 
---Exercício 3
-inverso [] = []
-inverso (x:xs) = inverso xs ++ [x]
+ehZero = \n -> n (\d -> f) v
 
---Exercício 4
-nprimeiros _ [] = []
-nprimeiros 0 _ = []
-nprimeiros n (x:xs) = x:nprimeiros (n-1) xs
+teste = \n -> (ehZero n) um dois
 
-nUltimos n l@(x:xs) = nprimeiros n (inverso l)
+--Aula 14: Funções de ordem superior
+map' _ [] = []
+map' f (x:xs) = f x: map' f xs
 
---Exercício 5
-soma2 _ [] = []
-soma2 [] _ = []
-soma2 (x:xs) (y:ys) = x + y:soma2 xs ys
+map'' f xs = [f x | x <- xs]
 
-soma2' [] [] = [] --Versão que mantém a lista maior
-soma2' (x:xs) [] = x:xs
-soma2' [] (y:ys) = y:ys
-soma2' (x:xs) (y:ys) = x + y:soma2 xs ys
+filter' _ [] = []
+filter' p (x:xs) = if p x then x: filter' p xs else filter' p xs
 
---Exercício 6
-pot2'' 0 = [1]
-pot2'' n = (2^n):(pot2'' (n-1))
+particao p xs = (filter' p xs,filter' (not.p) xs)
 
-pot2' n = inverso (pot2' n)
+---(.) = \f g x -> f (g x)
 
-pot2 n = [2^x|x<-[0..n]]
+--Aula 15:
+foldr' f n [] = n
+foldr' f n (x:xs) = f x (foldr' f n xs)
 
---Exercício 7
-intercalacao xs [] = xs
-intercalacao [] ys = ys
-intercalacao (x:xs) (y:ys) = if x <= y then x:intercalacao xs (y:ys) else y:intercalacao (x:xs) ys
+summ = foldr' (+) 0  -- n precisa botar xs, mas pode dar sobrecarga
 
---Exercício 8
-menor [x] = x
-menor (x:xs) = if x < m then x else m
-    where m = menor xs
-
---Exercício 9
-removerElem _ [] = []
-removerElem a (x:xs) = if a == x then xs else x:removerElem a xs
-
---Exercício 10
-ordenar [] = []
-ordenar l@(x:xs) = [menor l] ++ ordenar (removerElem (menor l) l)
-
---Exercício 11
-ins e [] = []
-ins e l@(x:xs)| e == x = l
-              | e < x = e:l
-              | otherwise = x:ins e xs
-
---Exercício 12
-enesimo 1 (x:xs) = x
-enesimo n (x:xs) = enesimo (n-1) xs
-
---Exercício 13
-repetir 0 e = []
-repetir n e = (e:repetir (n-1) e)
-
---Exercício 14
-numString'' 0 = '0'
-numString'' 1 = '1'
-numString'' 2 = '2'
-numString'' 3 = '3'
-numString'' 4 = '4'
-numString'' 5 = '5'
-numString'' 6 = '6'
-numString'' 7 = '7'
-numString'' 8 = '8'
-numString'' 9 = '9'
---numString'' :: Int -> Char
---numString'' x = toEnum (x+48)
-
-numString' 0 = ""
-numString' x = numString'' (rem x 10) : numString' (div x 10)
-
-numString x = inverso(numString' x)
-
---Exercício 15
-stringNum' '0' = 0
-stringNum' '1' = 1
-stringNum' '2' = 2
-stringNum' '3' = 3
-stringNum' '4' = 4
-stringNum' '5' = 5
-stringNum' '6' = 6
-stringNum' '7' = 7
-stringNum' '8' = 8
-stringNum' '9' = 9
-
-stringNum [] = 0
-stringNum (x:xs) = (stringNum' x)*10^(length (xs)) + stringNum xs
-
---Exercício 16
-bin2int' [] _ = 0
-bin2int' (x:xs) y = (stringNum' x)*2^y + bin2int' xs (y+1) 
-
-bin2int (x:xs) = bin2int' (inverso (x:xs)) 0
-
---Exercício 17
-int2bin' 0 = []
-int2bin' x = numString'' (rem x 2): int2bin'(div x 2)
-
-int2bin x = inverso(int2bin' x)
-
---Exercício 18
-minusculas [] = []
-minusculas (x:xs) = if fromEnum x > 64 && fromEnum x < 91 then toEnum ((fromEnum x)+32): minusculas xs else x:minusculas xs
