@@ -177,11 +177,14 @@ filter' p (x:xs) = if p x then x: filter' p xs else filter' p xs
 
 particao p xs = (filter' p xs,filter' (not.p) xs)
 
----(.) = \f g x -> f (g x)
+----(.) = \f g x -> f (g x)
 
 --Aula 15:
-foldr' f n [] = n
+foldr' f n [] = n --foldright
 foldr' f n (x:xs) = f x (foldr' f n xs)
 
 summ = foldr' (+) 0  -- n precisa botar xs, mas pode dar sobrecarga
 
+fatorial n = foldr' (*) 1 [1..n]
+
+tamanho xs = foldr' (\x r -> 1 + r) 0 xs
