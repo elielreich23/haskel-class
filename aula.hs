@@ -194,6 +194,23 @@ map''' f ys = foldr' (\s ss -> f s:ss) [] ys --most complex function yet
 foldl' f n [] = n --foldleft tem recursão de cauda
 foldl' f n (x:xs) =  foldl' f (f n x) xs
 
+--Aula 17: Monadas
+newba = putStr "Qual o seu nome?\n" >> getLine >>= (\nome -> putStr ("Hello " ++ nome ++ "\n"))
+
+newba' = do putStr "Qual o seu nome?\n"
+           nome <- getLine
+           putStr "Qual sua idade?\n"
+           idade <- getLine
+           putStr ("Nome: " ++ nome ++ "\nIdade: " ++ idade ++ "\n")
+
+factorial = do putStr "Numero: "
+               num <- getLine
+               let n = fat (read num)
+               putStr("O resultado eh: " ++ show n ++ "\n")
+
+--aula 18
+
+
 --exo aula 01/07
 numLines (x:xs) = aux 1 (x:xs)
 
