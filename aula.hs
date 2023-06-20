@@ -209,6 +209,24 @@ factorial = do putStr "Numero: "
                putStr("O resultado eh: " ++ show n ++ "\n")
 
 --aula 18
+-Aula 18:
+numLines xs = zip [1..] xs --posso omitir o xs
+
+main = do putStr "Arquivo: "
+          arq <- getLine
+          txt <- readFile arq
+          putStr txt
+          let nc = length txt
+          let nl = length(lines txt)
+          putStr ("Numero de caracteres: " ++ show nc ++ "\n")
+          putStr ("Numero de linhas: " ++ show nl ++ "\n")
+          let linhanum = numLines(lines txt)
+          imprimir linhanum
+
+imprimir [] = putStr "\n"
+imprimir ((l,s):xs) = do putStr (show l ++ "-")
+                         putStrLn s
+                         imprimir xs
 
 
 --exo aula 01/07
@@ -337,3 +355,15 @@ int2bin x = inverso(int2bin' x)
 --Exercício 18
 minusculas [] = []
 minusculas (x:xs) = if fromEnum x > 64 && fromEnum x < 91 then toEnum ((fromEnum x)+32): minusculas xs else x:minusculas xs
+
+--trabalho 4
+--função lines
+
+numLines xs = zip [1..] xs --posso omitir o xs
+
+
+aux _ [] = []
+aux n (x:xs) = (n,x): aux n xs -- fazer um filtro  
+
+allNumWords [] = []
+allNumWords ((a,b):xs) =  aux a (words b): allNumWords xs
