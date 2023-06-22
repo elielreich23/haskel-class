@@ -209,7 +209,6 @@ factorial = do putStr "Numero: "
                putStr("O resultado eh: " ++ show n ++ "\n")
 
 --aula 18
--Aula 18:
 numLines xs = zip [1..] xs --posso omitir o xs
 
 main = do putStr "Arquivo: "
@@ -227,6 +226,26 @@ imprimir [] = putStr "\n"
 imprimir ((l,s):xs) = do putStr (show l ++ "-")
                          putStrLn s
                          imprimir xs
+--aula 19
+data Semana = Dom|Seg|Ter|Qua|Qui|Sex|Sab deriving Show
+
+
+proxDiaSemana Seg = Ter
+proxDiaSemana Ter = Qua
+proxDiaSemana Qua = Qui
+proxDiaSemana Qui = Sex
+proxDiaSemana _ = Seg 
+
+data Data = Dia Int Int Int deriving Show
+
+ano (Dia d m a) = a 
+
+data Contato = Pessoa String String Data deriving Show
+
+type Agenda = [Contato]
+
+procurar nome [] = "nao encontrado"
+procurar nome ((Pessoa n t d):xs) = if n == nome then t else procurar nome xs
 
 
 --exo aula 01/07
