@@ -259,6 +259,13 @@ insListaArvore::[a] -> Arvore a
 insListaArvore [] = Folha
 insListaArvore (x:xs) = ins x (insListaArvore xs)
 
+menorArvore:: Arvore a -> a
+menorArvore (No x Folha dir) = x
+menorArvore (No x esq dir) = menorArvore esq
+
+arvoreLista Folha = []
+arvoreLista (No x esq dir) = arvoreLista esq ++ [x] ++ arvoreLista dir
+
 --exo aula 01/07
 numLines (x:xs) = aux 1 (x:xs)
 
